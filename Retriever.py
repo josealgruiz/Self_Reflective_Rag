@@ -1,8 +1,3 @@
-LANGCHAIN_TRACING_V2= True
-LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
-LANGCHAIN_API_KEY="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"
-LANGCHAIN_PROJECT="self-rag-jose"
-
 import sys
 __import__('pysqlite3')
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
@@ -17,7 +12,6 @@ from langchain_community.vectorstores import Chroma
 #import transformers
 #import torch
 #from langchain_ollama import OllamaEmbeddings
-#import ollama
 import chromadb
 #from langchain_community import embeddings
 #from langchain_community.embeddings import OllamaEmbeddings
@@ -26,15 +20,7 @@ import chromadb.utils.embedding_functions as embedding_functions
 import ollama
 from tqdm import tqdm
 
-class OllamaEmbeddingsWrapper:
-    def __init__(self, model='nomic-embed-text'):
-        self.model = model
-
-    def embed_documents(self, texts):
-        return [ollama.embeddings(model=self.model, prompt=text)['embedding'] for text in texts]
-
-    def embed_query(self, text):
-        return ollama.embeddings(model=self.model, prompt=text)['embedding']
+from Embedding import OllamaEmbeddingsWrapper
 
 urls = [
     "https://lilianweng.github.io/posts/2023-06-23-agent/",
@@ -60,10 +46,10 @@ doc_splits = text_splitter.split_documents(docs_list)
 
 chroma_client = chromadb.PersistentClient(path="/workspaces/Self_Reflective_Rag/db")
 
-ollama_ef = embedding_functions.OllamaEmbeddingFunction(
-    url="http://localhost:11434/api/embeddings",
-    model_name="nomic-embed-text",
-)
+#ollama_ef = embedding_functions.OllamaEmbeddingFunction(
+#    url="http://localhost:11434/api/embeddings",
+#    model_name="nomic-embed-text",
+#)
 
 #client = chromadb.Client()
 #collection =  client.create_collection(name="rag-chroma")
