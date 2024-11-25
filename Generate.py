@@ -24,5 +24,5 @@ rag_chain = prompt | llm | StrOutputParser()
 def generation(docs,question):
     # Run
     generation = rag_chain.invoke({"context": docs, "question": question})
-    return(generation)
+    return(rag_chain,generation)
     

@@ -26,4 +26,4 @@ def answer_grader(llm,question,generation):
 
     answer_grader = answer_prompt | structured_llm_grader
     result = answer_grader.invoke({"question": question, "generation": generation})
-    return result
+    return answer_grader,result

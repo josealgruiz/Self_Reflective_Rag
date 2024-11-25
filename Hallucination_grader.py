@@ -24,4 +24,4 @@ def hallu_grader(llm,docs,generation):
 
     hallucination_grader = hallucination_prompt | structured_llm_grader
     result = hallucination_grader.invoke({"documents": docs, "generation": generation})
-    return result
+    return hallucination_grader,result

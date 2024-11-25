@@ -15,7 +15,7 @@ re_write_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-def question_rewriter(llm,question):
+def question_rewrite(llm,question):
     question_rewriter = re_write_prompt | llm | StrOutputParser()
     result = question_rewriter.invoke({"question": question})
-    return result
+    return question_rewriter,result
