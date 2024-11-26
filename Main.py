@@ -1,7 +1,11 @@
-LANGCHAIN_TRACING_V2= True
-LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
-LANGCHAIN_API_KEY="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"
-LANGCHAIN_PROJECT="self-rag-jose"
+import os
+import getpass
+from dotenv import load_dotenv
+load_dotenv()
+os.environ['LANGCHAIN_TRACING_V2']= 'true'
+os.environ['LANGCHAIN_ENDPOINT']="https://api.smith.langchain.com"
+os.environ['LANGCHAIN_API_KEY']=os.getenv("LANGCHAIN_API_KEY")
+os.environ['LANGCHAIN_PROJECT']="self-rag-jose"
 
 import LLM as Llm
 import Generate
@@ -12,9 +16,11 @@ import Retriever_load
 
 from langchain_ollama import ChatOllama
 from pprint import pprint
+from langsmith import traceable
 
 
 #define the llm model to be used
+
 llm = ChatOllama(model="llama3.2", temperature=0)
 
 retriever = Retriever_load.get_retriever()
@@ -58,7 +64,7 @@ class GraphState(TypedDict):
 
     ### Nodes
 
-
+@traceable
 def retrieve(state):
     """
     Retrieve documents
@@ -76,7 +82,7 @@ def retrieve(state):
     documents = retriever.get_relevant_documents(question)
     return {"documents": documents, "question": question}
 
-
+@traceable
 def generate(state):
     """
     Generate answer
@@ -95,7 +101,7 @@ def generate(state):
     generation = rag_chain.invoke({"context": documents, "question": question})
     return {"documents": documents, "question": question, "generation": generation}
 
-
+@traceable
 def grade_documents(state):
     """
     Determines whether the retrieved documents are relevant to the question.
@@ -126,7 +132,7 @@ def grade_documents(state):
             continue
     return {"documents": filtered_docs, "question": question}
 
-
+@traceable
 def transform_query(state):
     """
     Transform the query to produce a better question.
@@ -149,7 +155,7 @@ def transform_query(state):
 
 ### Edges
 
-
+@traceable
 def decide_to_generate(state):
     """
     Determines whether to generate an answer, or re-generate a question.
@@ -177,7 +183,7 @@ def decide_to_generate(state):
         print("---DECISION: GENERATE---")
         return "generate"
 
-
+@traceable
 def grade_generation_v_documents_and_question(state):
     """
     Determines whether the generation is grounded in the document and answers question.

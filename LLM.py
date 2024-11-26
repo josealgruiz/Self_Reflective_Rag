@@ -13,6 +13,7 @@
 
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
+
 #import requests
 #from ollama_functions import OllamaFunctions
 #from Embedding import OllamaEmbeddingsWrapper
@@ -59,6 +60,7 @@ grade_prompt = ChatPromptTemplate.from_messages(
         ("human", "Retrieved document: \n\n {document} \n\n User question: {question}"),
     ]
 )
+
 
 def retrieval_grader(llm,retriever):
     structured_llm_grader = llm.with_structured_output(GradeDocuments)
